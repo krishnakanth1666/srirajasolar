@@ -16,6 +16,8 @@ I cannot log in for you; follow the steps in order. Expect **1–2 hours** the f
 
 **Important:** Your `backend/.env` file is **not** uploaded to GitHub (it is in `.gitignore`). You will type the important values again in the Render dashboard—never paste passwords in chat.
 
+**On this computer:** Git is already initialized and the first commit is done. Your next step is **Part 1.2** (create the empty repo on GitHub), then **Part 1.4** starting at `git remote add origin` (skip `git init` / `git add` / first `git commit` if you did not change files—or run `git add .`, `git commit`, `git push` again after any edits).
+
 ---
 
 ## Part 1 — Put your project on GitHub
@@ -51,14 +53,7 @@ git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 ```
 
-**If this folder is not yet a Git repo**, run:
-
-```powershell
-cd C:\Users\krish\solar_frontend
-git init
-git add .
-git commit -m "Initial commit for deployment"
-```
+**If you never ran Git in this folder before**, run `git init`, `git add .`, `git commit` first. (This repo may already be set up—then skip to the next block.)
 
 **Connect GitHub and push** (replace the URL with yours from step 1.2):
 
