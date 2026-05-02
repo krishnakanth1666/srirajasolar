@@ -67,6 +67,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   currentTestimonialIndex = 0;
   private testimonialInterval: any;
 
+  /** Bundled slider images when API media is missing (e.g. ephemeral hosting) or URLs fail. */
+  private readonly localSliderSlides: Slide[] = [
+    { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 0 },
+    ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+      id: n + 1,
+      title: `Solar ${n}`,
+      image_url: `assets/Solar_image_${n}.jpeg`,
+      order: n,
+    })),
+  ];
+
   /**
    * Planning-only estimates for avoided grid emissions (India-style rough factors).
    * Not a carbon credit certificate; helps visualize impact similar to industry sustainability sections.
@@ -243,49 +254,68 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
             }));
 
             // Drop records that don't have a valid image URL to avoid blank slides.
-            this.slides = preparedSlides.filter(slide => !!slide.image_url);
+            let nextSlides = preparedSlides.filter((slide) => !!slide.image_url);
 
             // Sort slides by order to ensure correct sequence
-            this.slides.sort((a, b) => (a.order || 0) - (b.order || 0));
+            nextSlides.sort((a, b) => (a.order || 0) - (b.order || 0));
 
-            if (this.slides.length > 0) {
-              // Preload images to ensure they're ready
-              this.preloadImages();
-            } else {
-              // Fallback when API images are invalid/missing
-              this.slides = [
-                { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 1 }
-              ];
+            if (nextSlides.length === 0) {
+              nextSlides = [...this.localSliderSlides];
             }
+            this.slides = nextSlides;
+            this.preloadImages();
           } else {
-            // Fallback to local images if API returns empty
-            this.slides = [
-              { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 1 }
-            ];
+            this.slides = [...this.localSliderSlides];
           }
           this.startSlideshow();
         },
         error: () => {
-          // Fallback to local images on error
-          this.slides = [
-            { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 1 }
-          ];
+          this.slides = [...this.localSliderSlides];
           this.startSlideshow();
         }
       });
   }
 
-  private normalizeSlideImageUrl(imageUrl: string): string {
+  private normalizeSlideImageUrl(imageUrl: string | null | undefined): string {
     if (!imageUrl) return '';
-    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
-      return imageUrl;
+    let url = imageUrl.trim();
+    if (
+      typeof window !== 'undefined' &&
+      window.location.protocol === 'https:' &&
+      url.startsWith('http://')
+    ) {
+      url = `https://${url.slice(7)}`;
+    }
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
     }
     // Build absolute URL when backend returns relative media path
     const apiOrigin = new URL(environment.apiUrl).origin;
-    if (imageUrl.startsWith('/')) {
-      return `${apiOrigin}${imageUrl}`;
+    if (url.startsWith('/')) {
+      return `${apiOrigin}${url}`;
     }
-    return `${apiOrigin}/${imageUrl}`;
+    return `${apiOrigin}/${url}`;
+  }
+
+  /** Map failed remote/media URL to bundled asset filename (Render media often 404s). */
+  private tryMapRemoteUrlToLocalAsset(src: string): string | null {
+    try {
+      const u = new URL(src, 'https://placeholder.local');
+      const file = u.pathname.split('/').pop() || '';
+      if (file && /\.(jpe?g|png|webp)$/i.test(file)) {
+        const normalized = file.replace(/solar_image/gi, 'Solar_image');
+        return `assets/${normalized}`;
+      }
+    } catch {
+      if (src.includes('media/') || src.includes('slider_images')) {
+        const parts = src.split('/');
+        const file = parts.pop() || '';
+        if (file) {
+          return `assets/${file.replace(/solar_image/gi, 'Solar_image')}`;
+        }
+      }
+    }
+    return null;
   }
 
   startSlideshow() {
@@ -363,8 +393,22 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const img = event.target;
     img.classList.add('error');
     
-    // Try to fix case sensitivity issues
     const currentSrc = img.src;
+
+    if (currentSrc.startsWith('http://') && !img.dataset['retriedHttps']) {
+      img.dataset['retriedHttps'] = 'true';
+      img.src = currentSrc.replace(/^http:\/\//i, 'https://');
+      return;
+    }
+
+    const localFromRemote = this.tryMapRemoteUrlToLocalAsset(currentSrc);
+    if (localFromRemote && !img.dataset['retriedLocal']) {
+      img.dataset['retriedLocal'] = 'true';
+      img.src = localFromRemote;
+      return;
+    }
+
+    // Try to fix case sensitivity issues
     if (currentSrc.includes('assets/')) {
       const filename = currentSrc.split('/').pop();
       // Try with different case variations

@@ -8,7 +8,6 @@
         <span class="solar">ENERGY</span>
       </div>
     </div>
-    <a class="nav-testimonials-link" href="#testimonials">Testimonials</a>
     <nav class="main-nav" aria-label="Primary navigation">
       <ul>
         <li><a href="#home">Home</a></li>
@@ -16,6 +15,7 @@
         <li><a href="#services">Services</a></li>
         <li><a href="#sustainability">Sustainability</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
       </ul>
     </nav>
   </div>
@@ -204,47 +204,6 @@
     </div>
   </section>
 
-  <!-- Testimonials Section -->
-  <section id="testimonials" class="testimonials-section">
-    <div class="container">
-      <h2 class="section-title">What Our Customers Say</h2>
-      <div class="testimonials-carousel">
-        <button class="testimonial-nav prev-testimonial" (click)="prevTestimonial()" *ngIf="testimonials.length > 1">
-          <span>&#10094;</span>
-        </button>
-        
-        <div class="testimonials-container">
-          <div *ngFor="let testimonial of testimonials; let i = index" 
-               class="testimonial-card" 
-               [class.active]="i === currentTestimonialIndex">
-            <div class="testimonial-rating">
-              <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= testimonial.rating">★</span>
-            </div>
-            <div class="testimonial-content">
-              <p>"{{ testimonial.text }}"</p>
-            </div>
-            <div class="testimonial-author">
-              <h4>{{ testimonial.author }}</h4>
-              <p>{{ testimonial.role }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <button class="testimonial-nav next-testimonial" (click)="nextTestimonial()" *ngIf="testimonials.length > 1">
-          <span>&#10095;</span>
-        </button>
-        
-        <div class="testimonial-indicators" *ngIf="testimonials.length > 1">
-          <button *ngFor="let testimonial of testimonials; let i = index" 
-                  [class.active]="i === currentTestimonialIndex"
-                  (click)="goToTestimonial(i)"
-                  [attr.aria-label]="'Go to testimonial ' + (i + 1)">
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Contact Section -->
   <section id="contact" class="contact-section">
     <div class="container">
@@ -414,6 +373,47 @@
       </div>
     </div>
   </section>
+
+  <!-- Testimonials Section (after contact) -->
+  <section id="testimonials" class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <div class="testimonials-carousel">
+        <button class="testimonial-nav prev-testimonial" (click)="prevTestimonial()" *ngIf="testimonials.length > 1">
+          <span>&#10094;</span>
+        </button>
+        
+        <div class="testimonials-container">
+          <div *ngFor="let testimonial of testimonials; let i = index" 
+               class="testimonial-card" 
+               [class.active]="i === currentTestimonialIndex">
+            <div class="testimonial-rating">
+              <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= testimonial.rating">★</span>
+            </div>
+            <div class="testimonial-content">
+              <p>"{{ testimonial.text }}"</p>
+            </div>
+            <div class="testimonial-author">
+              <h4>{{ testimonial.author }}</h4>
+              <p>{{ testimonial.role }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <button class="testimonial-nav next-testimonial" (click)="nextTestimonial()" *ngIf="testimonials.length > 1">
+          <span>&#10095;</span>
+        </button>
+        
+        <div class="testimonial-indicators" *ngIf="testimonials.length > 1">
+          <button *ngFor="let testimonial of testimonials; let i = index" 
+                  [class.active]="i === currentTestimonialIndex"
+                  (click)="goToTestimonial(i)"
+                  [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
 
 <!-- Footer Section -->
@@ -431,8 +431,8 @@
           <li><a href="#about">About Us</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#sustainability">Sustainability</a></li>
-          <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
         </ul>
       </div>
       <div class="footer-contact">
