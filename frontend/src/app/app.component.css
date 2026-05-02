@@ -50,7 +50,7 @@ body {
   justify-content: space-between;
   align-items: center;
   max-width: 100%;
-  padding: 0 15px;
+  padding: 0 12px;
 }
 
 .header-inner {
@@ -119,6 +119,7 @@ body {
 .main-nav {
   flex: 0 0 auto;
   margin-left: auto;
+  margin-right: 18px;
   display: flex;
   justify-content: flex-end;
 }

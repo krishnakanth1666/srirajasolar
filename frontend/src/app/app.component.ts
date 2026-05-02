@@ -236,19 +236,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe({
         next: (data) => {
           if (data && data.length > 0) {
-            // Process image URLs - use local assets if URL points to media
-            const preparedSlides = data.map(slide => {
-              // If image_url is from backend media, convert to local assets path
-              if (slide.image_url && slide.image_url.includes('/media/slider_images/')) {
-                const filename = slide.image_url.split('/').pop();
-                // Ensure proper case for Solar_image files
-                const correctedFilename = filename && filename.toLowerCase().includes('solar_image') 
-                  ? filename.replace(/solar_image/i, 'Solar_image')
-                  : filename;
-                return { ...slide, image_url: `assets/${correctedFilename}` };
-              }
-              return slide;
-            });
+            // Normalize API image URLs (absolute, relative, or media path)
+            const preparedSlides = data.map((slide) => ({
+              ...slide,
+              image_url: this.normalizeSlideImageUrl(slide.image_url),
+            }));
 
             // Drop records that don't have a valid image URL to avoid blank slides.
             this.slides = preparedSlides.filter(slide => !!slide.image_url);
@@ -281,6 +273,19 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
           this.startSlideshow();
         }
       });
+  }
+
+  private normalizeSlideImageUrl(imageUrl: string): string {
+    if (!imageUrl) return '';
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+      return imageUrl;
+    }
+    // Build absolute URL when backend returns relative media path
+    const apiOrigin = new URL(environment.apiUrl).origin;
+    if (imageUrl.startsWith('/')) {
+      return `${apiOrigin}${imageUrl}`;
+    }
+    return `${apiOrigin}/${imageUrl}`;
   }
 
   startSlideshow() {
