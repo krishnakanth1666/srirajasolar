@@ -1,5 +1,3 @@
-/// <reference types="@types/google.maps" />
-
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -138,6 +136,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       const mapElement = document.getElementById('map');
       if (!mapElement) {
         console.error('Map element not found');
+        return;
+      }
+
+      if (typeof google === 'undefined' || !google.maps) {
+        console.error('Google Maps script not loaded');
         return;
       }
 
