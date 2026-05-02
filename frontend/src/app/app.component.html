@@ -1,0 +1,384 @@
+<!-- Header Section -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="logo">
+      <img src="assets/SR_SOLAR_LOGO-min.jpg" alt="Srirajasolar Logo">
+      <div class="company-name">
+        <span class="sri-raja">SRIRAJASOLAR</span>
+        <span class="solar">ENERGY</span>
+      </div>
+    </div>
+    <a class="nav-testimonials-link" href="#testimonials">Testimonials</a>
+    <nav class="main-nav" aria-label="Primary navigation">
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="main-content">
+  <!-- Hero Section with Slider -->
+  <section id="home" class="hero-section">
+    <div class="slider-container">
+      <div class="slider">
+        <div *ngIf="slides.length === 0" class="slider-loading">
+          <div class="loading-spinner"></div>
+          <p>Loading images...</p>
+        </div>
+        
+        <div *ngFor="let slide of slides; let i = index" 
+             class="slide" 
+             [class.active]="i === currentSlideIndex">
+          <img [src]="slide.image_url" 
+               [alt]="slide.title" 
+               (error)="handleImageError($event)"
+               (load)="onImageLoad($event)"
+               loading="eager">
+        </div>
+        
+        <!-- Navigation buttons - only show if more than one slide -->
+        <button *ngIf="slides.length > 1" class="slider-nav prev" (click)="prevSlide()">
+          <span class="arrow">&#10094;</span>
+        </button>
+        <button *ngIf="slides.length > 1" class="slider-nav next" (click)="nextSlide()">
+          <span class="arrow">&#10095;</span>
+        </button>
+        
+        <!-- Slide indicators - only show if more than one slide -->
+        <div *ngIf="slides.length > 1" class="slide-indicators">
+          <button *ngFor="let slide of slides; let i = index" 
+                  [class.active]="i === currentSlideIndex"
+                  (click)="goToSlide(i)">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about-section">
+    <div class="container">
+      <h2 class="section-title">About Us</h2>
+      <div class="about-content">
+        <div class="about-text">
+          <h3>Srirajasolar</h3>
+          <p>We are a leading provider of solar energy solutions in Rajahmundry, Andhra Pradesh. With over 10 years of experience, we specialize in designing and installing high-quality solar systems for residential, commercial, and industrial applications.</p>
+          <p>Our mission is to promote sustainable energy practices and help our customers reduce their carbon footprint while saving on energy costs.</p>
+          <div class="about-features">
+            <div class="feature">
+              <i class="fas fa-solar-panel"></i>
+              <h4>Quality Products</h4>
+              <p>We use only the highest quality solar panels and components.</p>
+            </div>
+            <div class="feature">
+              <i class="fas fa-tools"></i>
+              <h4>Expert Installation</h4>
+              <p>Our team of certified technicians ensures perfect installation.</p>
+            </div>
+            <div class="feature">
+              <i class="fas fa-headset"></i>
+              <h4>24/7 Support</h4>
+              <p>We provide round-the-clock customer support and maintenance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="assets/solar_installation.jpg" alt="Solar Installation">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="services-section">
+    <div class="container">
+      <h2 class="section-title">Our Services</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-home"></i>
+          </div>
+          <h3>Residential Solar</h3>
+          <p>Custom solar solutions for homes, apartments, and residential complexes.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-building"></i>
+          </div>
+          <h3>Commercial Solar</h3>
+          <p>Energy-efficient solar systems for businesses, offices, and retail spaces.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-industry"></i>
+          </div>
+          <h3>Industrial Solar</h3>
+          <p>High-capacity solar solutions for factories, warehouses, and industrial facilities.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">
+            <i class="fas fa-tools"></i>
+          </div>
+          <h3>Maintenance & Repair</h3>
+          <p>Regular maintenance and repair services to ensure optimal performance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials" class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title">What Our Customers Say</h2>
+      <div class="testimonials-carousel">
+        <button class="testimonial-nav prev-testimonial" (click)="prevTestimonial()" *ngIf="testimonials.length > 1">
+          <span>&#10094;</span>
+        </button>
+        
+        <div class="testimonials-container">
+          <div *ngFor="let testimonial of testimonials; let i = index" 
+               class="testimonial-card" 
+               [class.active]="i === currentTestimonialIndex">
+            <div class="testimonial-rating">
+              <span *ngFor="let star of [1,2,3,4,5]" class="star" [class.filled]="star <= testimonial.rating">★</span>
+            </div>
+            <div class="testimonial-content">
+              <p>"{{ testimonial.text }}"</p>
+            </div>
+            <div class="testimonial-author">
+              <h4>{{ testimonial.author }}</h4>
+              <p>{{ testimonial.role }}</p>
+            </div>
+          </div>
+        </div>
+        
+        <button class="testimonial-nav next-testimonial" (click)="nextTestimonial()" *ngIf="testimonials.length > 1">
+          <span>&#10095;</span>
+        </button>
+        
+        <div class="testimonial-indicators" *ngIf="testimonials.length > 1">
+          <button *ngFor="let testimonial of testimonials; let i = index" 
+                  [class.active]="i === currentTestimonialIndex"
+                  (click)="goToTestimonial(i)"
+                  [attr.aria-label]="'Go to testimonial ' + (i + 1)">
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="section-subtitle">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+      
+      <div class="contact-wrapper">
+        <div class="contact-card contact-info-panel">
+          <div class="info-header contact-card-header">
+            <h3>Contact Information</h3>
+            <p>Reach out to us through any of these channels</p>
+          </div>
+          
+          <ul class="info-list">
+            <li>
+              <div class="info-line">
+                <div class="info-mini-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div>
+                  <span class="info-label">Address</span>
+                  <p>Door No: 45-22-18, ByPass Road</p>
+                  <p>Thadithota Junction, Rajahmundry</p>
+                  <p>Andhra Pradesh - 533103</p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="info-line">
+                <div class="info-mini-icon">
+                  <i class="fas fa-phone"></i>
+                </div>
+                <div>
+                  <span class="info-label">Phone</span>
+                  <p><a href="tel:+916262959579">+91 6262959579</a></p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="info-line">
+                <div class="info-mini-icon">
+                  <i class="fas fa-envelope"></i>
+                </div>
+                <div>
+                  <span class="info-label">Email</span>
+                  <p><a href="mailto:srirajasolar@gmail.com">srirajasolar&#64;gmail.com</a></p>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="info-line">
+                <div class="info-mini-icon">
+                  <i class="fas fa-clock"></i>
+                </div>
+                <div>
+                  <span class="info-label">Working Hours</span>
+                  <p>Monday – Saturday: 9:00 AM – 6:00 PM</p>
+                  <p>Sunday: Closed</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <div class="contact-card contact-form-panel">
+          <div class="form-header contact-card-header">
+            <h3>Send Us a Message</h3>
+            <p>Fill out the form below and we'll get back to you</p>
+          </div>
+          
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">
+                  <i class="fas fa-user"></i>
+                  Full Name <span class="required">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  formControlName="name" 
+                  placeholder="Enter your full name"
+                  [class.error]="contactForm.get('name')?.touched && contactForm.get('name')?.invalid">
+                <div class="error-message" *ngIf="contactForm.get('name')?.touched && contactForm.get('name')?.errors?.['required']">
+                  <i class="fas fa-exclamation-circle"></i> Name is required
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="email">
+                  <i class="fas fa-envelope"></i>
+                  Email Address <span class="required">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  formControlName="email" 
+                  placeholder="Enter your email address"
+                  [class.error]="contactForm.get('email')?.touched && contactForm.get('email')?.invalid">
+                <div class="error-message" *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.errors?.['required']">
+                  <i class="fas fa-exclamation-circle"></i> Email is required
+                </div>
+                <div class="error-message" *ngIf="contactForm.get('email')?.touched && contactForm.get('email')?.errors?.['email']">
+                  <i class="fas fa-exclamation-circle"></i> Please enter a valid email address
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">
+                  <i class="fas fa-phone"></i>
+                  Phone Number <span class="required">*</span>
+                </label>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  formControlName="phone" 
+                  placeholder="Enter your 10-digit phone number"
+                  maxlength="10"
+                  [class.error]="contactForm.get('phone')?.touched && contactForm.get('phone')?.invalid">
+                <div class="error-message" *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.errors?.['required']">
+                  <i class="fas fa-exclamation-circle"></i> Phone number is required
+                </div>
+                <div class="error-message" *ngIf="contactForm.get('phone')?.touched && contactForm.get('phone')?.errors?.['pattern']">
+                  <i class="fas fa-exclamation-circle"></i> Please enter a valid 10-digit phone number
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label for="message">
+                  <i class="fas fa-comment"></i>
+                  Message
+                </label>
+                <textarea 
+                  id="message" 
+                  formControlName="message" 
+                  placeholder="Tell us about your requirements or any questions you have..."
+                  rows="5"></textarea>
+              </div>
+            </div>
+            
+            <button type="submit" class="submit-btn" [disabled]="contactForm.invalid || contactForm.disabled">
+              <span *ngIf="!contactForm.disabled">
+                <i class="fas fa-paper-plane"></i> Send Message
+              </span>
+              <span *ngIf="contactForm.disabled">
+                <i class="fas fa-spinner fa-spin"></i> Sending...
+              </span>
+            </button>
+          </form>
+          
+          <div class="form-message" *ngIf="showMessage" [class.success]="success" [class.error]="!success">
+            <i class="fas" [class.fa-check-circle]="success" [class.fa-exclamation-circle]="!success"></i>
+            <span>{{ message }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="map-container">
+        <h3>Find Us on Map</h3>
+        <div id="map"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Footer Section -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="assets/SR_SOLAR_LOGO-min.jpg" alt="Srirajasolar Logo">
+        <p>Srirajasolar is a leading provider of solar energy solutions in Andhra Pradesh, India.</p>
+      </div>
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h3>Contact Us</h3>
+        <p><i class="fas fa-map-marker-alt"></i> Door No: 45-22-18, ByPass Road, Rajahmundry</p>
+        <p><i class="fas fa-phone"></i> +91 6262959579</p>
+        <p><i class="fas fa-envelope"></i> srirajasolar&#64;gmail.com</p>
+      </div>
+      <div class="footer-social">
+        <h3>Follow Us</h3>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/srirajasolar_energysystems" target="_blank" rel="noopener noreferrer" class="social-icon">
+            <i class="fab fa-instagram"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; {{ currentYear }} Srirajasolar. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<router-outlet></router-outlet> 
