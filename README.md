@@ -25,6 +25,12 @@ A modern, production-ready full-stack web application for Sri Raja Solar Energy 
     └── images_to_add/ # Place new images here
 ```
 
+## Deploy for the first time (step-by-step)
+
+If you are new to GitHub and hosting, open **[`DEPLOY_STEP_BY_STEP.md`](DEPLOY_STEP_BY_STEP.md)** and follow it from top to bottom. It covers GitHub → Render → GoDaddy DNS for **www.srirajasolar.com**.
+
+---
+
 ## 🛠️ Quick Start
 
 ### Prerequisites
