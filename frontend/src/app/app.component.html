@@ -14,6 +14,7 @@
         <li><a href="#home">Home</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
+        <li><a href="#sustainability">Sustainability</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -126,6 +127,79 @@
           <h3>Maintenance & Repair</h3>
           <p>Regular maintenance and repair services to ensure optimal performance.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Carbon / sustainability impact (Freyr-style messaging: CO₂, trees, calculator) -->
+  <section id="sustainability" class="sustainability-section">
+    <div class="container">
+      <h2 class="section-title">Sustainability &amp; carbon impact</h2>
+      <p class="sustainability-lead">
+        Going solar shrinks your carbon footprint and supports cleaner air—similar to how leading solar brands highlight
+        <strong>CO₂ avoided</strong>, <strong>tree equivalents</strong>, and long-term green energy. Use the estimator
+        below for planning; final numbers depend on your roof, generation, and grid mix.
+      </p>
+
+      <div class="carbon-highlight-grid">
+        <div class="carbon-highlight-card">
+          <div class="carbon-highlight-icon" aria-hidden="true"><i class="fas fa-cloud"></i></div>
+          <div class="carbon-highlight-value">~5.2 t</div>
+          <div class="carbon-highlight-label">CO₂ avoided / year <span class="carbon-ref">(typical 5 kW home)</span></div>
+        </div>
+        <div class="carbon-highlight-card">
+          <div class="carbon-highlight-icon" aria-hidden="true"><i class="fas fa-tree"></i></div>
+          <div class="carbon-highlight-value">~80+</div>
+          <div class="carbon-highlight-label">Trees equivalent <span class="carbon-ref">(illustrative)</span></div>
+        </div>
+        <div class="carbon-highlight-card">
+          <div class="carbon-highlight-icon" aria-hidden="true"><i class="fas fa-bolt"></i></div>
+          <div class="carbon-highlight-value">25+ yrs</div>
+          <div class="carbon-highlight-label">Clean generation life of quality systems</div>
+        </div>
+        <div class="carbon-highlight-card">
+          <div class="carbon-highlight-icon" aria-hidden="true"><i class="fas fa-file-invoice"></i></div>
+          <div class="carbon-highlight-value">ESG-ready</div>
+          <div class="carbon-highlight-label">Document savings &amp; avoided emissions for reporting &amp; green-building goals</div>
+        </div>
+      </div>
+
+      <div class="carbon-calculator-panel">
+        <div class="carbon-calculator-head">
+          <h3><i class="fas fa-calculator" aria-hidden="true"></i> Your estimated impact</h3>
+          <p>Enter system size (kW). We use typical annual generation and an approximate India grid emissions factor.</p>
+        </div>
+        <div class="carbon-calculator-row">
+          <label class="carbon-kw-label" for="carbon-kw">System capacity (kW)</label>
+          <input
+            id="carbon-kw"
+            type="number"
+            min="0.5"
+            max="2000"
+            step="0.5"
+            class="carbon-kw-input"
+            [ngModel]="carbonCalcKw"
+            (ngModelChange)="setCarbonKw($event)"
+          />
+        </div>
+        <div class="carbon-calculator-results">
+          <div class="carbon-result">
+            <span class="carbon-result-label">Est. annual generation</span>
+            <span class="carbon-result-value">{{ carbonAnnualKwh | number }} kWh</span>
+          </div>
+          <div class="carbon-result">
+            <span class="carbon-result-label">Est. CO₂ avoided / year</span>
+            <span class="carbon-result-value">{{ carbonTonsCo2 }} tonnes</span>
+          </div>
+          <div class="carbon-result">
+            <span class="carbon-result-label">Tree equivalent (rough)</span>
+            <span class="carbon-result-value">{{ carbonTreesEquivalent | number }}</span>
+          </div>
+        </div>
+        <p class="carbon-disclaimer">
+          Illustrative only—not a carbon credit issuance, REC certificate, or audit. We can discuss metering, documentation,
+          and pathways that align with your sustainability reporting when you <a href="#contact">contact us</a>.
+        </p>
       </div>
     </div>
   </section>
@@ -356,6 +430,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#about">About Us</a></li>
           <li><a href="#services">Services</a></li>
+          <li><a href="#sustainability">Sustainability</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>

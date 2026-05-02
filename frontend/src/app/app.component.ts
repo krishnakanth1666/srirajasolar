@@ -67,6 +67,38 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   currentTestimonialIndex = 0;
   private testimonialInterval: any;
 
+  /**
+   * Planning-only estimates for avoided grid emissions (India-style rough factors).
+   * Not a carbon credit certificate; helps visualize impact similar to industry sustainability sections.
+   */
+  carbonCalcKw = 5;
+  private readonly KWH_PER_KW_YEAR = 1400;
+  private readonly GRID_CO2_KG_PER_KWH = 0.75;
+
+  get carbonAnnualKwh(): number {
+    return Math.round(this.carbonCalcKw * this.KWH_PER_KW_YEAR);
+  }
+
+  get carbonTonsCo2(): number {
+    const kg = this.carbonAnnualKwh * this.GRID_CO2_KG_PER_KWH;
+    return Math.round((kg / 1000) * 10) / 10;
+  }
+
+  /** Rough equivalence: ~21 kg CO₂ absorbed per tree per year (order-of-magnitude). */
+  get carbonTreesEquivalent(): number {
+    const kg = this.carbonAnnualKwh * this.GRID_CO2_KG_PER_KWH;
+    return Math.max(1, Math.round(kg / 21));
+  }
+
+  setCarbonKw(value: number | string): void {
+    const n = typeof value === 'string' ? parseFloat(value) : value;
+    if (!Number.isFinite(n)) {
+      this.carbonCalcKw = 5;
+      return;
+    }
+    this.carbonCalcKw = Math.min(2000, Math.max(0.5, n));
+  }
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient
