@@ -37,7 +37,7 @@ body {
 /* Header Styles */
 .main-content {
   background-color: var(--page-bg);
-  padding-top: 72px;
+  padding-top: 0;
 }
 
 .header {
@@ -62,6 +62,30 @@ body {
 
 .header-inner {
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0;
+  border: 1px solid rgba(30, 61, 89, 0.2);
+  border-radius: 8px;
+  background: #fff;
+  color: #1E3D59;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: var(--solar-orange);
+  color: var(--solar-orange);
 }
 
 .logo {
@@ -164,13 +188,19 @@ body {
 
 /* Hero Section with Slider */
 .hero-section {
-  margin-top: 0;
+  margin-top: 72px;
+  padding: 0;
   position: relative;
   width: 100%;
   height: min(72vh, 620px);
-  min-height: 360px;
+  min-height: 320px;
   overflow: hidden;
-  background-color: #e8ecf1;
+  background-color: #1E3D59;
+}
+
+#home.hero-section {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .slider-container {
@@ -206,7 +236,8 @@ body {
 
 .slide img {
   width: 100%;
-  height: 100%;
+  height: 100% !important;
+  max-width: none;
   object-fit: cover;
   display: block;
   background-color: #f0f0f0;
@@ -334,6 +365,7 @@ body {
 /* About Section */
 .about-section {
   background-color: var(--page-bg);
+  padding: 56px 0;
 }
 
 .about-content {
@@ -431,7 +463,7 @@ body {
 
 /* Services Section */
 .services-section {
-  padding: 40px 0;
+  padding: 56px 0;
   background-color: var(--page-bg);
 }
 
@@ -1259,270 +1291,231 @@ body {
 
 /* Responsive Design */
 @media (max-width: 992px) {
+  .container {
+    padding: 0 16px;
+  }
+
   .about-content {
     flex-direction: column;
   }
-  
+
   .about-image {
     order: -1;
     margin-bottom: 30px;
   }
-  
-  .about-features {
-    margin-top: 20px;
+
+  .hero-section {
+    height: 420px;
+    min-height: unset;
   }
-  
-  .slider-container {
-    height: 500px;
-  }
-  
+
   .contact-wrapper {
     grid-template-columns: 1fr;
     gap: 30px;
   }
-  
-  .contact-info-panel {
-    position: static;
-  }
-  
+
   .contact-form-panel {
-    padding: 35px;
+    padding: 28px;
   }
 
   .testimonials-carousel {
-    padding: 0 36px;
+    padding: 0 44px;
   }
 
-  .testimonial-card {
-    padding: 30px;
+  .testimonials-container {
+    min-height: 320px;
   }
 }
 
 @media (max-width: 768px) {
-  .header .container,
   .header-inner {
-    flex-direction: row;
-    padding: 0 10px;
+    padding: 8px 12px;
   }
-  
-  .logo {
-    margin-right: 15px;
+
+  .mobile-menu-btn {
+    display: flex;
   }
-  
+
   .main-nav {
-    justify-content: flex-end;
+    display: none;
+    flex: 1 1 100%;
+    width: 100%;
+    margin: 0;
+    padding: 8px 0 12px;
+    border-top: 1px solid rgba(30, 61, 89, 0.1);
+  }
+
+  .main-nav.open {
+    display: block;
   }
 
   .main-nav ul {
-    gap: 10px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
   }
-  
+
+  .main-nav li {
+    border-bottom: 1px solid rgba(30, 61, 89, 0.08);
+  }
+
   .main-nav a {
-    font-size: 0.8rem;
+    display: block;
+    padding: 14px 8px;
+    font-size: 0.9rem;
+    text-align: center;
   }
-  
+
   .logo img {
-    height: 40px;
+    height: 42px;
   }
-  
-  .company-name span:first-child,
-  .company-name span:last-child {
+
+  .company-name .sri-raja {
     font-size: 1rem;
   }
-  
-  .testimonial-card {
-    min-width: 100%;
-    max-width: 100%;
+
+  .company-name .solar {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
   }
-  
+
+  .hero-section {
+    margin-top: 64px;
+    height: 360px;
+  }
+
+  .main-content section[id] {
+    scroll-margin-top: 72px;
+  }
+
+  .section-title {
+    font-size: 1.85rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    margin-bottom: 32px;
+    padding: 0 8px;
+  }
+
+  .slider-nav {
+    width: 44px;
+    height: 44px;
+  }
+
+  .testimonials-carousel {
+    padding: 0 48px;
+  }
+
+  .testimonial-card {
+    padding: 24px 20px;
+  }
+
   .testimonial-content {
     font-size: 0.95rem;
-    padding-left: 18px;
+    padding-left: 0;
   }
 
   .testimonial-nav {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1rem;
+    width: 44px;
+    height: 44px;
   }
-  
-  .author-image {
-    width: 45px;
-    height: 45px;
-  }
-  
-  .slider-container {
-    height: 400px;
-  }
-  
-  .slide-content h2 {
-    font-size: 1.5rem;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-  
+
   .footer-content {
     flex-direction: column;
-    gap: 30px;
+    gap: 28px;
   }
-  
+
   .footer-logo,
   .footer-links,
   .footer-contact,
   .footer-social {
     min-width: 100%;
   }
-  
-  .slider-nav {
-    width: 40px;
-    height: 40px;
-    padding: 0.8rem;
-  }
-  
-  .arrow {
-    font-size: 1.2rem;
-  }
-  
-  .testimonials-grid {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
-  }
-  
-  .testimonial-card {
-    padding: 15px;
-  }
-  
-  .testimonial-content {
-    font-size: 0.9rem;
-  }
-  
-  .author-info h4 {
-    font-size: 0.9rem;
-  }
-  
-  .author-info p {
-    font-size: 0.8rem;
-  }
 }
 
 @media (max-width: 576px) {
-  .header .container,
-  .header-inner {
-    flex-direction: column;
-    padding: 5px 10px;
-  }
-  
-  .logo {
-    margin-right: 0;
-    margin-bottom: 10px;
+  .container {
+    padding: 0 12px;
   }
 
-  .main-nav {
-    width: 100%;
-    margin-left: 0;
-    justify-content: center;
+  .header {
+    padding: 6px 0;
   }
-  
-  .main-nav ul {
-    flex-wrap: wrap;
-    justify-content: center;
+
+  .hero-section {
+    margin-top: 58px;
+    height: 280px;
   }
-  
-  .logo img {
-    height: 35px;
+
+  .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
   }
-  
-  .company-name span:first-child,
-  .company-name span:last-child {
-    font-size: 0.9rem;
+
+  .about-text p,
+  .sustainability-lead {
+    font-size: 1rem;
   }
-  
-  .slider-container {
-    height: 300px;
+
+  .feature {
+    min-width: 100%;
   }
-  
+
+  .contact-section {
+    padding: 48px 0;
+  }
+
+  .contact-info-panel,
+  .contact-form-panel {
+    padding: 20px 16px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+
+  .submit-btn {
+    padding: 16px 20px;
+    font-size: 1rem;
+  }
+
+  .testimonials-section {
+    padding: 48px 0 56px;
+  }
+
   .testimonials-carousel {
     padding: 0 40px;
   }
-  
+
+  .testimonials-container {
+    min-height: 300px;
+  }
+
   .testimonial-card {
-    padding: 25px 20px;
+    padding: 20px 16px;
   }
-  
+
   .testimonial-content {
-    font-size: 0.95rem;
-    padding: 0 15px;
+    font-size: 0.9rem;
   }
-  
-  .testimonial-content::before,
-  .testimonial-content::after {
-    font-size: 3rem;
+
+  .testimonial-content::before {
+    font-size: 2.5rem;
+    top: -12px;
   }
-  
-  .testimonial-nav {
-    width: 40px;
-    height: 40px;
-    font-size: 1.2rem;
+
+  .slider-nav.prev {
+    left: 0.5rem;
   }
-  
-  .contact-wrapper {
-    grid-template-columns: 1fr;
-    gap: 25px;
+
+  .slider-nav.next {
+    right: 0.5rem;
   }
-  
-  .contact-info-panel,
-  .contact-form-panel {
-    padding: 25px;
-  }
-  
-  .info-card {
-    padding: 15px;
-  }
-  
-  .info-icon {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .info-icon i {
-    font-size: 1.2rem;
-  }
-  
-  .submit-btn {
-    padding: 16px 25px;
-    font-size: 1rem;
-  }
-  
-  .slider-nav {
-    width: 35px;
-    height: 35px;
-    padding: 0.6rem;
-  }
-  
-  .arrow {
-    font-size: 1rem;
-  }
-  
-  .testimonials-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  .testimonial-card {
-    padding: 15px;
-  }
-  
-  .testimonial-content {
-    font-size: 0.85rem;
-  }
-  
-  .author-info h4 {
-    font-size: 0.85rem;
-  }
-  
-  .author-info p {
-    font-size: 0.75rem;
+
+  .slide-indicators {
+    bottom: 0.5rem;
   }
 } 

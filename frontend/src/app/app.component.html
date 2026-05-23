@@ -8,14 +8,27 @@
         <span class="solar">ENERGY</span>
       </div>
     </div>
-    <nav class="main-nav" aria-label="Primary navigation">
+    <button
+      type="button"
+      class="mobile-menu-btn"
+      (click)="toggleMobileMenu()"
+      [attr.aria-expanded]="mobileMenuOpen"
+      aria-controls="primary-nav"
+      aria-label="Toggle navigation menu">
+      <i class="fas" [class.fa-bars]="!mobileMenuOpen" [class.fa-times]="mobileMenuOpen"></i>
+    </button>
+    <nav
+      id="primary-nav"
+      class="main-nav"
+      [class.open]="mobileMenuOpen"
+      aria-label="Primary navigation">
       <ul>
-        <li><a href="#home">Home</a></li>
-        <li><a href="#about">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#sustainability">Sustainability</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#home" (click)="closeMobileMenu()">Home</a></li>
+        <li><a href="#about" (click)="closeMobileMenu()">About</a></li>
+        <li><a href="#services" (click)="closeMobileMenu()">Services</a></li>
+        <li><a href="#sustainability" (click)="closeMobileMenu()">Sustainability</a></li>
+        <li><a href="#contact" (click)="closeMobileMenu()">Contact</a></li>
+        <li><a href="#testimonials" (click)="closeMobileMenu()">Testimonials</a></li>
       </ul>
     </nav>
   </div>
@@ -26,11 +39,6 @@
   <section id="home" class="hero-section">
     <div class="slider-container">
       <div class="slider">
-        <div *ngIf="slides.length === 0" class="slider-loading">
-          <div class="loading-spinner"></div>
-          <p>Loading images...</p>
-        </div>
-        
         <div *ngFor="let slide of slides; let i = index" 
              class="slide" 
              [class.active]="i === currentSlideIndex">

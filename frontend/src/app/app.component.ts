@@ -70,19 +70,19 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Bundled slider images when API media is missing (e.g. ephemeral hosting) or URLs fail. */
   private readonly localSliderSlides: Slide[] = [
-    { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 0 },
     ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
-      id: n + 1,
+      id: n,
       title: `Solar ${n}`,
       image_url: `assets/Solar_image_${n}.jpeg`,
       order: n,
     })),
   ];
 
-  /** Slides excluded from the hero carousel (e.g. Solar_image_9.jpg). */
+  /** Slides excluded from the hero carousel. */
   private readonly excludedSliderImagePatterns = [
     /Solar_image_9\.(jpe?g|png|webp)/i,
     /solar_image_9\.(jpe?g|png|webp)/i,
+    /solar_installation\.(jpe?g|png|webp)/i,
   ];
 
   private filterExcludedSlides(slides: Slide[]): Slide[] {
@@ -404,7 +404,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     if (this.slides.length === 0) {
       this.slides = [
-        { id: 1, title: 'Solar Installation', image_url: 'assets/solar_installation.jpg', order: 1 }
+        { id: 1, title: 'Solar 1', image_url: 'assets/Solar_image_1.jpeg', order: 1 }
       ];
       this.currentSlideIndex = 0;
       this.startSlideshow();
