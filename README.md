@@ -7,7 +7,6 @@ A modern, production-ready full-stack web application for Sri Raja Solar Energy 
 - **Interactive Image Slider** - Auto-rotating image carousel with navigation
 - **Interactive Testimonials** - Animated customer testimonials carousel with star ratings
 - **Contact Form** - Beautiful gradient-styled form with validation
-- **Google Maps Integration** - Interactive map showing company location
 - **Responsive Design** - Mobile-friendly across all devices
 - **Modern UI/UX** - Gradient backgrounds, smooth animations, and professional styling
 

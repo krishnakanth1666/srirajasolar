@@ -15,30 +15,6 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Roboto', sans-serif;
-    }
-    #map {
-      height: 400px;
-      width: 100%;
-      background-color: #f8f9fa;
-    }
-  </style>
-  <script>
-    function handleMapError() {
-      console.error('Error loading Google Maps');
-      const mapElement = document.getElementById('map');
-      if (mapElement) {
-        mapElement.innerHTML = '<div style="padding: 20px; text-align: center;">Error loading map. Please try again later.</div>';
-      }
-    }
-  </script>
-  <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCAwH8AXI9ly8SHDXS0tsv6EvUHHDjM4KE"
-    onerror="handleMapError()">
-  </script>
 </head>
 <body>
   <app-root></app-root>

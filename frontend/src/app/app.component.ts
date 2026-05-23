@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
@@ -26,7 +26,7 @@ interface Slide {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'solar_frontend';
   readonly currentYear = new Date().getFullYear();
   contactForm: FormGroup;
@@ -34,6 +34,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   success = false;
   showMessage = false;
   slides: Slide[] = [];
+  mobileMenuOpen = false;
   currentSlideIndex = 0;
   private slideInterval: any;
   private readonly SLIDE_DURATION = 5000; // 5 seconds per slide
@@ -77,6 +78,21 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       order: n,
     })),
   ];
+
+  /** Slides excluded from the hero carousel (e.g. Solar_image_9.jpg). */
+  private readonly excludedSliderImagePatterns = [
+    /Solar_image_9\.(jpe?g|png|webp)/i,
+    /solar_image_9\.(jpe?g|png|webp)/i,
+  ];
+
+  private filterExcludedSlides(slides: Slide[]): Slide[] {
+    return slides.filter(
+      (slide) =>
+        !this.excludedSliderImagePatterns.some((pattern) =>
+          pattern.test(slide.image_url)
+        )
+    );
+  }
 
   /**
    * Planning-only estimates for avoided grid emissions (India-style rough factors).
@@ -128,15 +144,28 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.slides = this.filterExcludedSlides([...this.localSliderSlides]);
+    this.startSlideshow();
     this.fetchSliderImages();
     this.startTestimonialCarousel();
   }
 
-  ngAfterViewInit() {
-    // Initialize map after view is ready
-    setTimeout(() => {
-      this.initMap();
-    }, 1000); // Give some time for the DOM to be ready
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  getAuthorInitials(name: string): string {
+    return name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0])
+      .join('')
+      .toUpperCase();
   }
 
   ngOnDestroy() {
@@ -174,104 +203,34 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.startTestimonialCarousel();
   }
 
-  initMap() {
-    try {
-      const mapElement = document.getElementById('map');
-      if (!mapElement) {
-        console.error('Map element not found');
-        return;
-      }
-
-      if (typeof google === 'undefined' || !google.maps) {
-        console.error('Google Maps script not loaded');
-        return;
-      }
-
-      // Srirajasolar location in Rajahmundry
-      const companyLocation = { lat: 16.99887, lng: 81.77959 };
-      const map = new google.maps.Map(mapElement, {
-        zoom: 15,
-        center: companyLocation,
-        styles: [
-          {
-            "featureType": "all",
-            "elementType": "geometry",
-            "stylers": [{"color": "#1E3D59"}]
-          }
-        ]
-      });
-
-      const marker = new google.maps.Marker({
-        position: companyLocation,
-        map: map,
-        title: 'Srirajasolar',
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 6,
-          fillColor: '#FF6B6B',
-          fillOpacity: 1,
-          strokeColor: '#ffffff',
-          strokeWeight: 2
-        }
-      });
-
-      // Add info window with company details
-      const infoWindow = new google.maps.InfoWindow({
-        content: `
-          <div style="padding: 8px; max-width: 250px;">
-            <h3 style="color: #1E3D59; margin: 0 0 3px 0; font-size: 14px;">Srirajasolar</h3>
-            <p style="margin: 0; font-size: 12px;">Door No: 45-22-18, ByPass Road</p>
-            <p style="margin: 2px 0; font-size: 12px;">Thadithota Junction, Rajahmundry</p>
-            <p style="margin: 2px 0; font-size: 12px;">Andhra Pradesh - 533103</p>
-            <p style="margin: 2px 0; font-size: 12px;">Phone: +91 6262959579</p>
-            <p style="margin: 2px 0; font-size: 12px;">Email: srirajasolar&#64;gmail.com</p>
-          </div>
-        `
-      });
-
-      // Open info window by default
-      infoWindow.open(map, marker);
-
-      // Keep the click listener to allow reopening the info window
-      marker.addListener('click', () => {
-        infoWindow.open(map, marker);
-      });
-    } catch (error) {
-      console.error('Error initializing map:', error);
-    }
-  }
-
   fetchSliderImages() {
-    // Try to fetch from API first, fallback to local images
     this.http.get<Slide[]>(`${environment.apiUrl}/slider-images/`)
       .subscribe({
         next: (data) => {
-          if (data && data.length > 0) {
-            // Normalize API image URLs (absolute, relative, or media path)
-            const preparedSlides = data.map((slide) => ({
-              ...slide,
-              image_url: this.normalizeSlideImageUrl(slide.image_url),
-            }));
-
-            // Drop records that don't have a valid image URL to avoid blank slides.
-            let nextSlides = preparedSlides.filter((slide) => !!slide.image_url);
-
-            // Sort slides by order to ensure correct sequence
-            nextSlides.sort((a, b) => (a.order || 0) - (b.order || 0));
-
-            if (nextSlides.length === 0) {
-              nextSlides = [...this.localSliderSlides];
-            }
-            this.slides = nextSlides;
-            this.preloadImages();
-          } else {
-            this.slides = [...this.localSliderSlides];
+          if (!data || data.length === 0) {
+            return;
           }
+
+          const preparedSlides = data.map((slide) => ({
+            ...slide,
+            image_url: this.normalizeSlideImageUrl(slide.image_url),
+          }));
+
+          let nextSlides = preparedSlides.filter((slide) => !!slide.image_url);
+          nextSlides.sort((a, b) => (a.order || 0) - (b.order || 0));
+          nextSlides = this.filterExcludedSlides(nextSlides);
+
+          if (nextSlides.length === 0) {
+            return;
+          }
+
+          this.slides = nextSlides;
+          this.currentSlideIndex = 0;
+          this.preloadImages();
           this.startSlideshow();
         },
         error: () => {
-          this.slides = [...this.localSliderSlides];
-          this.startSlideshow();
+          // Keep bundled slides already shown
         }
       });
   }
@@ -304,7 +263,11 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       const file = u.pathname.split('/').pop() || '';
       if (file && /\.(jpe?g|png|webp)$/i.test(file)) {
         const normalized = file.replace(/solar_image/gi, 'Solar_image');
-        return `assets/${normalized}`;
+        const localPath = `assets/${normalized}`;
+        if (this.excludedSliderImagePatterns.some((pattern) => pattern.test(localPath))) {
+          return null;
+        }
+        return localPath;
       }
     } catch {
       if (src.includes('media/') || src.includes('slider_images')) {
