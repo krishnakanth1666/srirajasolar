@@ -70,7 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Bundled slider images when API media is missing (e.g. ephemeral hosting) or URLs fail. */
   private readonly localSliderSlides: Slide[] = [
-    ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+    ...[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => ({
       id: n,
       title: `Solar ${n}`,
       image_url: `assets/Solar_image_${n}.jpeg`,
